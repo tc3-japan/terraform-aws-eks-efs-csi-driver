@@ -6,7 +6,6 @@ resource "helm_release" "kubernetes_efs_csi_driver" {
   repository = var.helm_chart_repo
   version    = var.helm_chart_version
   namespace  = var.namespace
-  timeout    = 3600
 
   set {
     name  = "controller.serviceAccount.create"
@@ -39,6 +38,11 @@ resource "helm_release" "kubernetes_efs_csi_driver" {
   set {
     name  = "node.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
     value = aws_iam_role.efs_csi_driver[0].arn
+  }
+
+  set {
+    name  = "replicaCount"
+    value = 1
   }
 
   values = [
